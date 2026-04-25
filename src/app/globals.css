@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+:root {
+  --background: #030611;
+  --foreground: #eef7ff;
+  --muted: #94a3b8;
+  --panel: rgba(9, 16, 35, 0.72);
+  --panel-strong: rgba(10, 22, 48, 0.9);
+  --cyan: #67e8f9;
+  --blue: #60a5fa;
+  --violet: #a78bfa;
+  --emerald: #34d399;
+  --amber: #fbbf24;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(96, 165, 250, 0.2), transparent 28rem),
+    radial-gradient(circle at 82% 18%, rgba(52, 211, 153, 0.14), transparent 24rem),
+    linear-gradient(135deg, #030611 0%, #081122 45%, #12091f 100%);
+  color: var(--foreground);
+  font-family: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+}
+
+button,
+textarea,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.nav-link {
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  transition:
+    color 180ms ease,
+    background 180ms ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.lab-shell {
+  position: relative;
+  min-height: 100vh;
+  padding-top: 5rem;
+}
+
+.grid-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(103, 232, 249, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(103, 232, 249, 0.08) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at center, black, transparent 75%);
+}
+
+.glass-panel {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(12, 22, 47, 0.82), rgba(5, 10, 24, 0.66));
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(22px);
+}
+
+.thin-panel {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  background: rgba(8, 15, 32, 0.68);
+}
+
+.primary-button {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  border-radius: 8px;
+  border: 1px solid rgba(103, 232, 249, 0.5);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.94), rgba(124, 58, 237, 0.92));
+  padding: 0.75rem 1.1rem;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 18px 46px rgba(37, 99, 235, 0.32);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease;
+}
+
+.primary-button:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 22px 60px rgba(103, 232, 249, 0.3);
+  transform: translateY(-1px);
+}
+
+.primary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.ghost-button {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(15, 23, 42, 0.72);
+  padding: 0.6rem 0.85rem;
+  color: #dbeafe;
+  font-weight: 650;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    background 160ms ease;
+}
+
+.ghost-button:hover {
+  border-color: rgba(103, 232, 249, 0.52);
+  background: rgba(14, 165, 233, 0.13);
+  color: white;
+}
+
+.section-band {
+  position: relative;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.section-inner {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 80rem;
+}
+
+.katex-display {
+  margin: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2rem 0;
+}
+
+@keyframes scanline {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.scanline::after {
+  animation: scanline 3.8s linear infinite;
+  background: linear-gradient(90deg, transparent, rgba(103, 232, 249, 0.28), transparent);
+  content: "";
+  height: 1px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
