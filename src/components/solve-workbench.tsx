@@ -335,8 +335,8 @@ function EinsteinMascot() {
   return (
     <section className="glass-panel overflow-hidden p-5">
       <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-end sm:justify-center">
-        <div className="relative h-36 w-36 shrink-0">
-          <svg viewBox="0 0 160 160" className="h-full w-full" aria-label="Cartoon mentor face saying great">
+        <div className="relative h-44 w-36 shrink-0">
+          <svg viewBox="0 0 160 210" className="h-full w-full" aria-label="Short full-body Einstein mentor giving a thumbs up">
             <defs>
               <filter id="mentorGlow">
                 <feGaussianBlur stdDeviation="4" result="blur" />
@@ -346,30 +346,43 @@ function EinsteinMascot() {
                 </feMerge>
               </filter>
             </defs>
-            <circle cx="80" cy="82" r="54" fill="#f8dcc2" stroke="#67e8f9" strokeWidth="3" filter="url(#mentorGlow)" />
+            <ellipse cx="80" cy="198" rx="50" ry="8" fill="#0f172a" opacity="0.55" />
+            <path d="M48 104 H112 L122 164 H38 Z" fill="#f8fafc" stroke="#67e8f9" strokeWidth="3" filter="url(#mentorGlow)" />
+            <path d="M58 110 L80 140 L102 110" fill="#e0f2fe" stroke="#0f172a" strokeWidth="3" strokeLinejoin="round" />
+            <path d="M74 116 H86 V164 H74 Z" fill="#22d3ee" opacity="0.9" />
+            <path d="M52 164 L48 194" stroke="#334155" strokeWidth="10" strokeLinecap="round" />
+            <path d="M108 164 L112 194" stroke="#334155" strokeWidth="10" strokeLinecap="round" />
+            <path d="M40 196 H64" stroke="#67e8f9" strokeWidth="8" strokeLinecap="round" />
+            <path d="M96 196 H120" stroke="#67e8f9" strokeWidth="8" strokeLinecap="round" />
+            <path d="M49 116 Q22 122 27 151" fill="none" stroke="#f8dcc2" strokeWidth="12" strokeLinecap="round" />
+            <path d="M111 116 Q132 96 139 70" fill="none" stroke="#f8dcc2" strokeWidth="12" strokeLinecap="round" />
+            <path d="M134 68 L145 58" stroke="#f8dcc2" strokeWidth="8" strokeLinecap="round" />
+            <path d="M140 69 L149 73" stroke="#f8dcc2" strokeWidth="7" strokeLinecap="round" />
+            <circle cx="28" cy="153" r="8" fill="#f8dcc2" />
+            <circle cx="80" cy="68" r="42" fill="#f8dcc2" stroke="#67e8f9" strokeWidth="3" filter="url(#mentorGlow)" />
             <path
-              d="M30 68 C8 46, 34 24, 48 42 C48 16, 82 12, 76 39 C95 14, 128 25, 108 48 C136 42, 143 73, 116 74"
+              d="M35 59 C12 36, 37 17, 51 35 C50 10, 82 8, 78 32 C98 8, 132 20, 111 42 C139 38, 146 65, 119 67"
               fill="#f8fafc"
               stroke="#dbeafe"
               strokeWidth="3"
             />
-            <path d="M42 82 Q54 74 66 82" fill="none" stroke="#0f172a" strokeWidth="4" strokeLinecap="round" />
-            <path d="M94 82 Q106 74 118 82" fill="none" stroke="#0f172a" strokeWidth="4" strokeLinecap="round" />
-            <circle cx="58" cy="88" r="4" fill="#0f172a" />
-            <circle cx="102" cy="88" r="4" fill="#0f172a" />
-            <path d="M76 90 Q68 108 84 108" fill="none" stroke="#c08457" strokeWidth="3" strokeLinecap="round" />
-            <path d="M56 118 C68 108, 77 116, 80 121 C84 116, 94 108, 106 118" fill="#f8fafc" stroke="#0f172a" strokeWidth="3" strokeLinecap="round" />
-            <path d="M58 128 Q80 139 102 128" fill="none" stroke="#0f172a" strokeWidth="4" strokeLinecap="round" />
-            <path d="M39 104 Q28 110 33 122" fill="none" stroke="#f8dcc2" strokeWidth="8" strokeLinecap="round" />
-            <path d="M121 104 Q132 110 127 122" fill="none" stroke="#f8dcc2" strokeWidth="8" strokeLinecap="round" />
+            <path d="M45 70 Q56 63 67 70" fill="none" stroke="#0f172a" strokeWidth="4" strokeLinecap="round" />
+            <path d="M93 70 Q104 63 115 70" fill="none" stroke="#0f172a" strokeWidth="4" strokeLinecap="round" />
+            <circle cx="60" cy="77" r="4" fill="#0f172a" />
+            <circle cx="100" cy="77" r="4" fill="#0f172a" />
+            <path d="M77 80 Q70 96 84 96" fill="none" stroke="#c08457" strokeWidth="3" strokeLinecap="round" />
+            <path d="M57 104 C68 95, 77 102, 80 106 C84 102, 94 95, 105 104" fill="#f8fafc" stroke="#0f172a" strokeWidth="3" strokeLinecap="round" />
+            <path d="M65 113 Q80 123 95 113" fill="none" stroke="#0f172a" strokeWidth="4" strokeLinecap="round" />
+            <path d="M39 90 Q28 96 33 108" fill="none" stroke="#f8dcc2" strokeWidth="8" strokeLinecap="round" />
+            <path d="M121 90 Q132 96 127 108" fill="none" stroke="#f8dcc2" strokeWidth="8" strokeLinecap="round" />
           </svg>
         </div>
         <div className="relative max-w-sm rounded-[8px] border border-cyan-300/30 bg-slate-950/80 p-4 text-center shadow-[0_0_34px_rgba(103,232,249,0.18)] sm:text-left">
           <div className="absolute -left-3 bottom-8 hidden h-6 w-6 rotate-45 border-b border-l border-cyan-300/30 bg-slate-950/80 sm:block" />
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-200">Cartoon lab mentor</p>
-          <p className="mt-2 text-3xl font-black text-white">Great!</p>
+          <p className="mt-2 text-3xl font-black text-white">Thumbs up!</p>
           <p className="mt-2 text-sm leading-6 text-slate-400">
-            The solution is complete. Check the units once more, then take the win.
+            Short Einstein says the solution is complete. Check the units once more, then take the win.
           </p>
         </div>
       </div>
