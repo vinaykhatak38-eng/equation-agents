@@ -59,6 +59,9 @@ export type SolverResponse = {
   modelUsed?: string;
   source?: "openai" | "demo";
   warning?: string;
+  savedRunId?: string;
+  persistenceStatus?: "saved" | "not_configured" | "failed";
+  persistenceMessage?: string;
 };
 
 export const agentRoster = [
@@ -199,6 +202,11 @@ export const solverJsonSchema = {
 
 export function createFallbackSolution(problem: string): SolverResponse {
   const lower = problem.toLowerCase();
+  const newtonSecondLawSolution = createNewtonSecondLawSolution(problem, lower);
+
+  if (newtonSecondLawSolution) {
+    return newtonSecondLawSolution;
+  }
 
   if (lower.includes("projectile") || lower.includes("20 m/s")) {
     return {
@@ -305,6 +313,121 @@ export function createFallbackSolution(problem: string): SolverResponse {
     "model\\;knowns\\;then\\;solve",
     "The problem was decomposed into concepts, variables, equations, algebra, numerical work, and verification."
   );
+}
+
+function createNewtonSecondLawSolution(problem: string, lower: string): SolverResponse | null {
+  const asksForForce = lower.includes("force") || lower.includes("f=ma") || lower.includes("f = ma");
+  const hasAccelerationCue = lower.includes("accelerat") || lower.includes("m/s");
+
+  if (!asksForForce || !hasAccelerationCue) {
+    return null;
+  }
+
+  const mass = extractUnitValue(problem, "(?:kg|kilograms?)");
+  const acceleration = extractUnitValue(problem, "m\\s*/\\s*s\\s*(?:\\^?\\s*2|2)");
+
+  if (mass === null || acceleration === null) {
+    return genericSolution(
+      problem,
+      "Newton's second law",
+      "F_{net}=ma",
+      "Use Newton's second law: net force equals mass times acceleration. Provide mass in kg and acceleration in m/s^2 for a numeric answer."
+    );
+  }
+
+  const force = mass * acceleration;
+  const massText = formatPhysicsNumber(mass);
+  const accelerationText = formatPhysicsNumber(acceleration);
+  const forceText = formatPhysicsNumber(force);
+
+  return {
+    topic: "Newton's second law",
+    difficulty: "beginner",
+    knownVariables: [
+      { symbol: "m", name: "mass", value: massText, unit: "kg", notes: "Mass of the object." },
+      { symbol: "a", name: "acceleration", value: accelerationText, unit: "m/s^2", notes: "Acceleration of the object." },
+    ],
+    unknownVariables: [
+      { symbol: "F_{net}", name: "net force", value: "unknown", unit: "N", notes: "The total unbalanced force causing the acceleration." },
+    ],
+    agents: buildAgentFallback([
+      "Classified the problem as Newton's second law for a constant-mass object.",
+      `Extracted mass ${massText} kg and acceleration ${accelerationText} m/s^2 from the prompt.`,
+      "Selected F_net = ma because the target is net force.",
+      "No rearrangement is needed because force is already isolated.",
+      `Calculated F_net = ${massText} x ${accelerationText} = ${forceText} N.`,
+      "Planned a simple force bar model that connects mass, acceleration, and net force.",
+      "Reported the force in newtons and stated the constant-mass assumption.",
+    ]),
+    equations: [
+      {
+        name: "Newton's second law",
+        expression: "F_{net}=ma",
+        variables: ["F_{net}", "m", "a"],
+        reason: "For a constant-mass object, the net force equals mass times acceleration.",
+      },
+    ],
+    stepByStepSolution: [
+      {
+        title: "Identify the model",
+        explanation: "The object has a given mass and acceleration, so Newton's second law connects those values to net force.",
+        equation: "F_{net}=ma",
+        result: "Use Newton's second law.",
+      },
+      {
+        title: "Substitute values",
+        explanation: "Multiply the mass by the acceleration while keeping units attached.",
+        equation: `F_{net}=(${massText}\\,\\text{kg})(${accelerationText}\\,\\text{m/s}^2)`,
+        result: `F_{net}=${forceText}\\,\\text{N}`,
+      },
+      {
+        title: "Interpret the result",
+        explanation: "One newton is one kg*m/s^2, so the unit from mass times acceleration is force.",
+        equation: "1\\,\\text{N}=1\\,\\text{kg}\\,\\text{m/s}^2",
+        result: `The net force is ${forceText} N.`,
+      },
+    ],
+    finalAnswer: `The net force is ${forceText} N.`,
+    commonMistakes: [
+      "Using weight mg when the problem asks for net force from acceleration.",
+      "Dropping the unit conversion that 1 N = 1 kg*m/s^2.",
+      "Adding extra forces when the net acceleration already gives the net force.",
+    ],
+    visualizationPlan: {
+      graphType: "force bar model",
+      xAxis: "quantity",
+      yAxis: "value",
+      data: [
+        { x: 0, y: mass, label: "mass kg" },
+        { x: 1, y: acceleration, label: "acceleration" },
+        { x: 2, y: force, label: "net force N" },
+      ],
+      notes: "A compact bar model showing the known mass, known acceleration, and resulting net force.",
+    },
+    imagePrompt: "Clean educational Newton's second law diagram with a block, acceleration arrow, net force arrow, and labeled equation F_net = ma.",
+    assumptions: ["The object's mass is constant.", "The given acceleration is caused by the net unbalanced force.", "Mass is in kg and acceleration is in m/s^2."],
+    dimensionalCheck: "kg x m/s^2 = kg*m/s^2 = N.",
+    source: "demo",
+    warning: "Demo fallback used because the live AI call was unavailable.",
+  };
+}
+
+function extractUnitValue(text: string, unitPattern: string): number | null {
+  const match = text.match(new RegExp(`(-?\\d+(?:\\.\\d+)?)\\s*${unitPattern}`, "i"));
+  if (!match) {
+    return null;
+  }
+
+  const value = Number(match[1]);
+  return Number.isFinite(value) ? value : null;
+}
+
+function formatPhysicsNumber(value: number) {
+  if (Number.isInteger(value)) {
+    return String(value);
+  }
+
+  return value.toFixed(3).replace(/\.?0+$/, "");
 }
 
 function buildAgentFallback(results: string[]): AgentContribution[] {

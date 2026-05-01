@@ -7,6 +7,8 @@ import {
   Atom,
   Brain,
   Calculator,
+  CloudOff,
+  Database,
   Image as ImageIcon,
   Loader2,
   Sigma,
@@ -183,6 +185,18 @@ export function SolveWorkbench({ initialProblem = "" }: SolveWorkbenchProps) {
             <div className="mt-4 flex gap-3 rounded-[8px] border border-cyan-300/25 bg-cyan-300/10 p-3 text-sm leading-6 text-cyan-100">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
               {solution.warning}
+            </div>
+          ) : null}
+          {solution?.persistenceStatus === "saved" ? (
+            <div className="mt-4 flex gap-3 rounded-[8px] border border-emerald-300/25 bg-emerald-300/10 p-3 text-sm leading-6 text-emerald-100">
+              <Database className="mt-0.5 h-4 w-4 shrink-0" />
+              {solution.persistenceMessage}
+            </div>
+          ) : null}
+          {solution?.persistenceStatus === "failed" ? (
+            <div className="mt-4 flex gap-3 rounded-[8px] border border-amber-300/30 bg-amber-300/10 p-3 text-sm leading-6 text-amber-100">
+              <CloudOff className="mt-0.5 h-4 w-4 shrink-0" />
+              {solution.persistenceMessage}
             </div>
           ) : null}
         </motion.div>

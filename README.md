@@ -49,13 +49,13 @@ OPENAI_IMAGE_MODEL=gpt-image-1.5
 Supabase variables:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_server_only_service_role_key
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_optional_server_only_service_role_key
 ```
 
 Do not expose `OPENAI_API_KEY` in frontend code. The app only reads it inside server route handlers.
-Do not expose `SUPABASE_SERVICE_ROLE_KEY` in frontend code. Only server routes should use it.
+Do not expose `SUPABASE_SERVICE_ROLE_KEY` in frontend code. Only server routes should use it. The anon key is used server-side for write-only anonymous solve logging until account-based notebooks are added.
 
 ## Local Setup
 
@@ -89,7 +89,7 @@ Supabase is the backend layer for this project, not the frontend host. Keep the 
 The included migration creates:
 
 - `public.solution_runs` for saved AI physics solve sessions
-- Row Level Security policies for authenticated users
+- Row Level Security policies for authenticated users and write-only anonymous solve logging
 - A `physics-visuals` storage bucket for generated educational images
 
 Install or run the Supabase CLI:
@@ -120,8 +120,8 @@ npx supabase db push
 After the Supabase project is live, add these variables to Vercel Project Settings:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
+SUPABASE_URL
+SUPABASE_ANON_KEY
 SUPABASE_SERVICE_ROLE_KEY
 ```
 
