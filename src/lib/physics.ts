@@ -59,6 +59,9 @@ export type SolverResponse = {
   modelUsed?: string;
   source?: "openai" | "demo";
   warning?: string;
+  savedRunId?: string;
+  persistenceStatus?: "saved" | "not_configured" | "failed";
+  persistenceMessage?: string;
 };
 
 export const agentRoster = [

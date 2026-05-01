@@ -6,6 +6,7 @@ import {
   solverJsonSchema,
   SolverResponse,
 } from "@/lib/physics";
+import { withPersistence } from "@/lib/solution-runs";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -35,7 +36,8 @@ export async function POST(request: Request) {
 
   const client = getOpenAIClient();
   if (!client) {
-    return Response.json(ensureVisualizationData(createFallbackSolution(parsed.data.problem)));
+    const fallback = ensureVisualizationData(createFallbackSolution(parsed.data.problem));
+    return Response.json(await withPersistence(parsed.data.problem, fallback));
   }
 
   const models = getModelChain();
@@ -72,11 +74,12 @@ export async function POST(request: Request) {
       }
 
       const solution = ensureVisualizationData(JSON.parse(outputText) as SolverResponse);
-      return Response.json({
+      const responseBody = await withPersistence(parsed.data.problem, {
         ...solution,
         modelUsed: model,
         source: "openai",
       } satisfies SolverResponse);
+      return Response.json(responseBody);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown OpenAI error";
       failures.push(`${model}: ${message}`);
@@ -87,10 +90,11 @@ export async function POST(request: Request) {
   }
 
   const fallback = ensureVisualizationData(createFallbackSolution(parsed.data.problem));
-  return Response.json({
+  const responseBody = await withPersistence(parsed.data.problem, {
     ...fallback,
     warning: `Live AI call failed, so a demo fallback was used. ${publicFailureSummary(failures)}`,
   });
+  return Response.json(responseBody);
 }
 
 function getModelChain() {
